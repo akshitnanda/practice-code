@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
+.next/
+dist/
+
+# Data artifacts
+*.parquet
+*.feather
+*.sqlite
+*.db
+research/datasets/*
+!research/datasets/.gitkeep
+
+# Env
+.env
+.env.*
