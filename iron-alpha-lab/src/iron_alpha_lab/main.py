@@ -4,7 +4,7 @@ import argparse
 from textwrap import dedent
 
 from .signals import IndicatorSnapshot, build_snapshot, generate_price_series
-from .stubs import MockPitchBundle, build_pitch_bundle
+from .stubs import MockPitchBundle, build_mock_pitch_bundle
 
 
 def build_ai_brief(snapshot: IndicatorSnapshot) -> str:
@@ -41,7 +41,7 @@ def build_ai_brief(snapshot: IndicatorSnapshot) -> str:
 
 
 def build_elevator_pitch(snapshot: IndicatorSnapshot, bundle: MockPitchBundle) -> str:
-    top_news_block = "\n".join(
+    top_news = "\n".join(
         [f"- {item.headline} ({item.sentiment}, impact {item.impact_score}/100)" for item in bundle.top_news]
     )
     return dedent(
@@ -58,8 +58,8 @@ def build_elevator_pitch(snapshot: IndicatorSnapshot, bundle: MockPitchBundle) -
         - MACD Histogram: {snapshot.macd_histogram:.4f}
 
         Mock Catalyst Layer (demo-ready stubs)
-        News Pulse ({bundle.news_source}):
-        {top_news_block}
+        News Pulse:
+        {top_news}
 
         On-Chain Pulse:
         - Active addresses Δ: {bundle.onchain.active_addresses_change_pct:+.1f}%
@@ -90,12 +90,6 @@ def cli() -> None:
     pitch.add_argument("--symbol", default="BTC-USD")
     pitch.add_argument("--days", type=int, default=120)
     pitch.add_argument("--seed", type=int, default=42)
-    pitch.add_argument("--live-news", action="store_true", help="Try fetching live RSS headlines")
-    pitch.add_argument(
-        "--rss-url",
-        default="https://cointelegraph.com/rss",
-        help="RSS endpoint used when --live-news is enabled",
-    )
 
     args = parser.parse_args()
 
@@ -105,11 +99,7 @@ def cli() -> None:
     if args.command == "demo":
         print(build_ai_brief(snapshot))
     elif args.command == "pitch":
-        bundle = build_pitch_bundle(
-            symbol=args.symbol,
-            use_live_news=args.live_news,
-            rss_url=args.rss_url,
-        )
+        bundle = build_mock_pitch_bundle(args.symbol)
         print(build_elevator_pitch(snapshot=snapshot, bundle=bundle))
 
 

@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .news import NewsItem, safe_fetch_rss_news
+
+@dataclass(frozen=True)
+class MockNewsItem:
+    headline: str
+    sentiment: str
+    impact_score: int
 
 
 @dataclass(frozen=True)
@@ -15,28 +20,27 @@ class MockOnChainPulse:
 @dataclass(frozen=True)
 class MockPitchBundle:
     symbol: str
-    top_news: list[NewsItem]
+    top_news: list[MockNewsItem]
     onchain: MockOnChainPulse
     watchlist: list[str]
-    news_source: str
 
 
-def mock_news_feed(symbol: str) -> list[NewsItem]:
+def mock_news_feed(symbol: str) -> list[MockNewsItem]:
     """Deterministic market-news stubs for demo usage."""
     symbol_root = symbol.split("-")[0]
     return [
-        NewsItem(
+        MockNewsItem(
             headline=f"{symbol_root} ecosystem sees rising developer activity this week",
             sentiment="positive",
             impact_score=74,
         ),
-        NewsItem(
-            headline="Macro rate-volatility may pressure high-beta assets near term",
+        MockNewsItem(
+            headline=f"Macro rate-volatility may pressure high-beta assets near term",
             sentiment="mixed",
             impact_score=61,
         ),
-        NewsItem(
-            headline="Large on-chain transfers trigger short-term risk monitoring",
+        MockNewsItem(
+            headline=f"Large on-chain transfers trigger short-term risk monitoring",
             sentiment="cautious",
             impact_score=67,
         ),
@@ -63,27 +67,4 @@ def build_mock_pitch_bundle(symbol: str) -> MockPitchBundle:
         top_news=mock_news_feed(symbol),
         onchain=mock_onchain_pulse(),
         watchlist=mock_watchlist(symbol),
-        news_source="mock",
-    )
-
-
-def build_pitch_bundle(symbol: str, use_live_news: bool = False, rss_url: str | None = None) -> MockPitchBundle:
-    if use_live_news and rss_url:
-        live_items, source = safe_fetch_rss_news(url=rss_url, limit=3)
-        if live_items:
-            return MockPitchBundle(
-                symbol=symbol,
-                top_news=live_items,
-                onchain=mock_onchain_pulse(),
-                watchlist=mock_watchlist(symbol),
-                news_source=source,
-            )
-
-    fallback = build_mock_pitch_bundle(symbol)
-    return MockPitchBundle(
-        symbol=fallback.symbol,
-        top_news=fallback.top_news,
-        onchain=fallback.onchain,
-        watchlist=fallback.watchlist,
-        news_source="mock_fallback",
     )

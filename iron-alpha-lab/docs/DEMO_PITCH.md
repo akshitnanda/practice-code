@@ -2,7 +2,7 @@
 
 ## 60-second elevator flow
 
-1. Run `iron-alpha-lab pitch --symbol BTC-USD --days 120` (or add `--live-news` for RSS attempt).
+1. Run `iron-alpha-lab pitch --symbol BTC-USD --days 120`.
 2. Read the output sections in this order:
    - Live Demo Snapshot
    - Mock Catalyst Layer
@@ -21,8 +21,3 @@
 - `mock_news_feed` -> news/RSS sentiment service
 - `mock_onchain_pulse` -> on-chain analytics API
 - `mock_watchlist` -> user portfolio/watchlist service
-
-
-## Reliability mode
-
-When `--live-news` is used, the CLI attempts RSS fetch and automatically falls back to deterministic mock headlines if the network/feed is unavailable.

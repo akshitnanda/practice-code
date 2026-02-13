@@ -37,7 +37,7 @@ This is perfect for hands-on Codex work because you can iteratively add:
 
 This means you can demo the full product workflow without waiting on external APIs.
 
-Now includes **F22 supercharged mock stubs** for pitch-ready flows (plus optional live RSS headlines with safe fallback):
+Now includes **F22 supercharged mock stubs** for pitch-ready flows:
 - mock news catalyst feed
 - mock on-chain pulse
 - mock watchlist + operator workflow
@@ -53,8 +53,6 @@ source .venv/bin/activate
 pip install -e .[dev]
 iron-alpha-lab demo --symbol BTC-USD --days 120
 iron-alpha-lab pitch --symbol BTC-USD --days 120
-# optional: attempt live headlines with automatic mock fallback
-iron-alpha-lab pitch --symbol BTC-USD --days 120 --live-news
 ```
 
 Run tests:
@@ -75,9 +73,6 @@ It automatically runs on push/PR when files in `iron-alpha-lab/` change, and exe
 - `pytest -q`
 - `iron-alpha-lab demo --symbol BTC-USD --days 120`
 - `iron-alpha-lab pitch --symbol BTC-USD --days 120`
-
-Optional local demo mode (not used in CI):
-- `iron-alpha-lab pitch --symbol BTC-USD --days 120 --live-news`
 
 To enable in your own GitHub repo:
 1. Push this repository to GitHub.
